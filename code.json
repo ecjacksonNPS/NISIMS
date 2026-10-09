@@ -1,0 +1,40 @@
+[
+  {
+    "name": "IMD_template_repo",
+    "organization": "NATIONAL PARK SERVICE",
+    "description": "a template repository for IMD",
+    "version": "0.0.1",
+    "status": "ongoing development",
+    "permissions": {
+      "usageType": "openSource",
+      "licenses": [
+        {
+          "name": "Public Domain, CC0-1.0",
+          "URL": "https://github.com/DOI-NPS/IMD_template_repo"
+        }
+      ]
+    },
+    "homepageURL": "https://github.com/DOI-NPS/IMD_template_repo",
+    "downloadURL": "https://github.com/DOI-NPS/IMD_template_repo",
+    "disclaimerURL": "hhtps://github.com/DOI-NPS/IMD_template_repo/blob/main/LICENSE",
+    "repositoryURL": "https://github.com/DOI-NPS/IMD_template_repo",
+    "vcs": "git",
+    "laborHours": 1,
+    "tags": [
+      "NRSS",
+      "IMD",
+      "template-repository"
+    ],
+    "languages": [
+      "R",
+      "python"
+    ],
+    "contact": {
+      "name": "Robert Baker",
+      "email": "robert_baker@nps.gov"
+    },
+    "date": {
+      "metadataLastUpdated": "2026-03-12"
+    }
+  }
+]

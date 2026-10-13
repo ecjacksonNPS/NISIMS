@@ -4,7 +4,7 @@
 # used by the Data Manager for the EPMT program.
 # Author: Jennifer Sieracki
 # Created: 2015-08-03 12:58
-# Updated: 2026-09-04 14:42 -- Fixes_from Jenn
+# Updated: 2026-09-04 14:42 -- Fixes_
 #----------------------------------------------------------------------------------------------------------------------
 
 # Import modules

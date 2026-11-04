@@ -4,7 +4,7 @@
 # used by the Data Manager for the EPMT program.
 # Author: Jennifer Sieracki
 # Created: 2015-08-03 12:58
-# Updated: 2026-09-04 14:42 -- Fixes_
+# Updated: 2026-09-04 14:42 -- Fixes1
 #----------------------------------------------------------------------------------------------------------------------
 
 # Import modules
@@ -13,6 +13,22 @@ import sys
 import traceback
 import time
 
+def SDE_append_workaround(aprec, SDErec):
+	"""Purpose: To add records from a feature class to a SDE feature class
+	Parameters:
+		apprec (string): The name of the records to append
+		SDErec (string): The name of the SDE records to which records are being appended
+	…
+    	Return: None
+    	"""
+	fields = arcpy.ListFields(aprec)
+	with arcpy.da.Editor(SDEgdb):
+		edit.startOperation()
+		with arcpy.da.SearchCursor(aprec, fields) as search_cursor:
+			with arcpy.da.InsertCursor(SDErec, fields) as insert_cursor:
+				for row in search_cursor:
+					insert_cursor.insertRow(row)
+		edit.stopOperation()
 
 def add_records(type, feature, fields, new_feature, table):
     """Purpose: To add records from a feature class to a SDE GDB table
@@ -39,7 +55,7 @@ def add_records(type, feature, fields, new_feature, table):
     wsspfm = arcpy.FieldMappings()
     wsspfm.addTable(SDEgdb + "\\" + table)
     survsppbef = arcpy.GetCount_management(SDEgdb + "\\dbo." + table).getOutput(0)
-    arcpy.Append_management(new_feature, SDEgdb + "\\dbo." + table, "NO_TEST", wsspfm)   
+    SDE_append_workaround(new_feature, SDEgdb + "\\dbo." + table)   
     survsppaft = arcpy.GetCount_management(SDEgdb + "\\dbo." + table).getOutput(0)
     survsppdif = int(survsppaft) - int(survsppbef)
     arcpy.AddMessage(str(survsppdif) + " records added to " + str(table))
@@ -150,13 +166,16 @@ def main():
             arcpy.AddField_management("WeedInfSel", "GUID_TX", "TEXT", "", "", 100)
             arcpy.CalculateField_management("WeedInfSel", "GUID_TX", "!INF_GUID!", "PYTHON_9.3")
             arcpy.DeleteField_management("WeedInfSel", "CURRENT_CD")
-            arcpy.analysis.Statistics("WeedInfSel", SDEgdb + "\\dbo.WeedInfSDESum", [["END_DT", "MIN"]], "GUID_TX;CURRENT_CD_join")
 
-            arcpy.JoinField_management(SDEgdb + "\\dbo.WeedInfestationLocation", "INF_GUID", SDEgdb + "\\dbo.WeedInfSDESum", "GUID_TX", ["CURRENT_CD_join", "GUID_TX", "MIN_END_DT"])
-            arcpy.CalculateField_management(SDEgdb + "\\dbo.WeedInfestationLocation", "CURRENT_CD", "calccur(!CURRENT_CD_join!, !CURRENT_CD!)", "PYTHON_9.3", curnull)
-            arcpy.CalculateField_management(SDEgdb + "\\dbo.WeedInfestationLocation", "END_DT", "Calc(!CURRENT_CD!, !END_DT!, !MIN_END_DT!)", "PYTHON_9.3", endnotnull_cb)
-            arcpy.DeleteField_management(SDEgdb + "\\dbo.WeedInfestationLocation", "CURRENT_CD_join;MIN_END_DT;GUID_TX")           
-            arcpy.Delete_management(SDEgdb + "\\dbo.WeedInfSDESum")
+            with arcpy.da.Editor(SDEgdb):
+                edit.startOperation()
+                arcpy.analysis.Statistics("WeedInfSel", SDEgdb + "\\dbo.WeedInfSDESum", [["END_DT", "MIN"]], "GUID_TX;CURRENT_CD_join")
+                arcpy.JoinField_management(SDEgdb + "\\dbo.WeedInfestationLocation", "INF_GUID", SDEgdb + "\\dbo.WeedInfSDESum", "GUID_TX", ["CURRENT_CD_join", "GUID_TX", "MIN_END_DT"])
+                arcpy.CalculateField_management(SDEgdb + "\\dbo.WeedInfestationLocation", "CURRENT_CD", "calccur(!CURRENT_CD_join!, !CURRENT_CD!)", "PYTHON_9.3", curnull)
+                arcpy.CalculateField_management(SDEgdb + "\\dbo.WeedInfestationLocation", "END_DT", "Calc(!CURRENT_CD!, !END_DT!, !MIN_END_DT!)", "PYTHON_9.3", endnotnull_cb)
+                arcpy.DeleteField_management(SDEgdb + "\\dbo.WeedInfestationLocation", "CURRENT_CD_join;MIN_END_DT;GUID_TX")           
+                arcpy.Delete_management(SDEgdb + "\\dbo.WeedInfSDESum")
+                edit.stopOperation()
 
             arcpy.AddField_management("WeedInfSel", "CURRENT_CD", "TEXT", "", "", 1)
             arcpy.CalculateField_management("WeedInfSel", "CURRENT_CD", "\"C\"", "PYTHON_9.3")
@@ -826,15 +845,15 @@ if __name__ == '__main__':
     today_cb = """def add_date():
         return time.strftime(\"%Y/%m/%d %H:%M:%S\")"""
     count_cb = """rec=0
-    def autoIncrement():
-        global rec
-        pStart = 1
-        pInterval = 1
-        if(rec == 0):
-            rec = pStart
-        else:
-            rec += pInterval
-        return rec"""
+def autoIncrement():
+    global rec
+    pStart = 1
+    pInterval = 1
+    if(rec == 0):
+        rec = pStart
+    else:
+        rec += pInterval
+    return rec"""
     curnull = """def calccur(newcd, oldcur):
         if newcd == \"H\":
             return newcd

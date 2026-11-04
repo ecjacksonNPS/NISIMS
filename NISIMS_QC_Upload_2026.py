@@ -1,3 +1,4 @@
+#### Hi Erik, I have made an edit to this code.
 #----------------------------------------------------------------------------------------------------------------------
 # Name: NISIMS_QC_Upload.py
 # Purpose: This script was created to automate the uploading of the NPS NISIMS QC geodatabase. It was created to be

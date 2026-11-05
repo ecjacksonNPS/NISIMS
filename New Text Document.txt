@@ -1,0 +1,25 @@
+Hey Erik and Jackie,
+
+ 
+
+Bummed to hear about the contract pause! Hopefully we can sort it out, but in the meantime, see the link below for the two data update scripts I’ve been working on. The buffer/combine one is ready for a full test and should work without a hitch (ideally) – the survey123/field map connector script is logically sound but untested fully, since that part was still being ironed out. Either way, let me know if you have any questions!
+
+ 
+
+Also, I didn’t include my copies of any of the original scripts, since you and Jen have done so much testing and editing on your end…
+
+ 
+
+​zip icon 20250918_Elder_NISIMS_Scripts.zip
+
+ 
+
+ 
+
+Philip Elder I Senior Software Development Engineer
+
+Esri | 167 S Taylor Ave | Louisville, CO 80027 | USA
+
+T 303.449.7779 x5875 | pelder@esri.com | esri.com
+
+ 

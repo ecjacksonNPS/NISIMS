@@ -57,7 +57,7 @@ trtac_cb = """def accalc(estac, cvrrt, totac):
     else:
         trtac = cvrrt*totac/100
         return trtac"""
-act_cb = """def Calc(agtrt, appnm, actuse, estac, carvol, patnm, calcac):
+act_cb = """def Calc(agtrt, appnm, actuse, estac, mixvol, mixnm, patnm, calcac):
     if actuse is None:
         if carvol is None:
             return
@@ -65,14 +65,28 @@ act_cb = """def Calc(agtrt, appnm, actuse, estac, carvol, patnm, calcac):
             actuse = agtrt/100*carvol
             return actuse
         elif appnm == \"OUNCES PER GALLON\":
-            actuse = agtrt*carvol
+            if mixnm == \"GALLONS\":
+                actuse = agtrt*carvol
+            elif mixnm == \"LITERS\"
+                actuse = agtrt*carvol*3.78541
             return actuse
         elif appnm == \"GRAMS PER GALLON\":
-            actuse = agtrt*carvol
+            if mixnm == \"GALLONS\":
+                actuse = agtrt*carvol
+            elif mixnm == \"LITERS\"
+                actuse = agtrt*carvol/3.78541
             return actuse
         elif appnm == \"FLUID OUNCES PER GALLON\":
-            actuse = agtrt*carvol
+            if mixnm == \"GALLONS\":
+                actuse = agtrt*carvol
+            elif mixnm == \"LITERS\"
+                actuse = agtrt*carvol/3.78541
             return actuse
+        elif appnm == \"GRAMS PER LITER\"
+            if mixnm == \"GALLONS\"
+                actuse = agtrt*carvol*3.78541
+            elif mixnm == \"LITERS\"
+                actuse = agtrt*carvol
         elif appnm is None:
             return
         else:
@@ -94,6 +108,8 @@ agt_cb = """def Calc(actnm, appnm, carnm):
             return \"GRAMS\"
         elif appnm == \"FLUID OUNCES PER GALLON\":
             return \"FLUID OUNCES\"
+        elif appnm == \"GRAMS PER LITER\"
+            return \"GRAMS\"
         else:
             actnm = appnm[:-8]
             return actnm
@@ -1436,7 +1452,7 @@ try:
                         
             # Calculate AGT_UOM_NM and ACTLUSE_QY and merge to CHEMICALCOMPCONTROLAGENT
             arcpy.JoinField_management("ChemicalTreatmentData_herbsel", "TRT_GUID", "ChemicalTreatmentData_cvrsum", "TRT_GUID", ["ESTACRE_ME", "PTTRN_NM"])                     
-            arcpy.CalculateField_management("ChemicalTreatmentData_herbsel", "ACTLUSE_QY", "Calc(!AGT_APP_RT!, !APP_UOM_NM!, !ACTLUSE_QY!, !ESTACRE_ME!, !MIXVOL_ME!, !PTTRN_NM!, !CLCACRE_ME!)", "PYTHON3", act_cb)
+            arcpy.CalculateField_management("ChemicalTreatmentData_herbsel", "ACTLUSE_QY", "Calc(!AGT_APP_RT!, !APP_UOM_NM!, !ACTLUSE_QY!, !ESTACRE_ME!, !MIXVOL_ME!, !MIXUOM_NM!, !PTTRN_NM!, !CLCACRE_ME!)", "PYTHON3", act_cb)
             arcpy.CalculateField_management("ChemicalTreatmentData_herbsel", "AGT_UOM_NM", "Calc(!AGT_UOM_NM!, !APP_UOM_NM!, !MIXUOM_NM!)", "PYTHON3", agt_cb)
             arcpy.CalculateField_management("ChemicalTreatmentData_herbsel", "AGT_APP_RT", "Calc(!AGT_APP_RT!, !ACTLUSE_QY!, !PTTRN_NM!, !CLCACRE_ME!, !ESTACRE_ME!)", "PYTHON3", rt_cb)
             arcpy.CalculateField_management("ChemicalTreatmentData_herbsel", "APP_UOM_NM", "Calc(!APP_UOM_NM!, !AGT_UOM_NM!)", "PYTHON3", rtuom_cb) 

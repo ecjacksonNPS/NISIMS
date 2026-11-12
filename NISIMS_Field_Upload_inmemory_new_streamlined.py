@@ -59,34 +59,34 @@ trtac_cb = """def accalc(estac, cvrrt, totac):
         return trtac"""
 act_cb = """def Calc(agtrt, appnm, actuse, estac, mixvol, mixnm, patnm, calcac):
     if actuse is None:
-        if carvol is None:
+        if mixvol is None:
             return
         elif appnm == "PERCENT SOLUTION":
-            actuse = agtrt/100*carvol
+            actuse = agtrt/100*mixvol
             return actuse
         elif appnm == \"OUNCES PER GALLON\":
             if mixnm == \"GALLONS\":
-                actuse = agtrt*carvol
+                actuse = agtrt*mixvol
             elif mixnm == \"LITERS\"
-                actuse = agtrt*carvol*3.78541
+                actuse = agtrt*mixvol/3.78541
             return actuse
         elif appnm == \"GRAMS PER GALLON\":
             if mixnm == \"GALLONS\":
-                actuse = agtrt*carvol
+                actuse = agtrt*mixvol
             elif mixnm == \"LITERS\"
-                actuse = agtrt*carvol/3.78541
+                actuse = agtrt*mixvol/3.78541
             return actuse
         elif appnm == \"FLUID OUNCES PER GALLON\":
             if mixnm == \"GALLONS\":
-                actuse = agtrt*carvol
+                actuse = agtrt*mixvol
             elif mixnm == \"LITERS\"
-                actuse = agtrt*carvol/3.78541
+                actuse = agtrt*mixvol/3.78541
             return actuse
         elif appnm == \"GRAMS PER LITER\"
             if mixnm == \"GALLONS\"
-                actuse = agtrt*carvol*3.78541
+                actuse = agtrt*mixvol*3.78541
             elif mixnm == \"LITERS\"
-                actuse = agtrt*carvol
+                actuse = agtrt*mixvol
         elif appnm is None:
             return
         else:

@@ -1,3 +1,4 @@
 {
-    "python.defaultInterpreterPath": "C:\\Program Files\\ArcGIS\\Pro\\bin\\Python\\envs\\arcgispro-py3"
+    "python.defaultInterpreterPath": "C:\\Program Files\\ArcGIS\\Pro\\bin\\Python\\envs\\arcgispro-py3",
+    "python-envs.defaultEnvManager": "ms-python.python:system"
 }

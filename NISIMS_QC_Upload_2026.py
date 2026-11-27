@@ -716,22 +716,22 @@ def main():
                 add_records("Restoration Component", "RestorationTreatmentData_rescompsel", ["REST_CL_NM", "TRT_GUID"], "restb2", "RESTORATIONCOMPONENT")
             if fc == ("RevegetationTreatmentData"):
                 add_records("Revegetation Component", "RevegetationTreatmentData_revcomp", ["VEG_UOM_NM", "PHNLGY_NM", "STOCK_ME", "TRT_GUID"], "revtb2", "REVEGETATIONCOMPONENT")
-            for fc in arcpy.ListFeatureClasses("PhotoLocation"):
-                photfm = arcpy.FieldMappings()
-                photfm.addTable(SDEgdb + "\\dbo.PhotoLocation")
-                photlocbef = arcpy.GetCount_management(SDEgdb + "\\dbo.PhotoLocation").getOutput(0)
-                arcpy.Append_management("PhotoLocation_fc", SDEgdb + "\\dbo.PhotoLocation", "NO_TEST", photfm)
-                photlocaft = arcpy.GetCount_management(SDEgdb + "\\dbo.PhotoLocation").getOutput(0)
-                photlocdif = int(photlocaft) - int(photlocbef)
-                arcpy.AddMessage(str(photlocdif) + " records added to PhotoLocation")
-                for fc2 in arcpy.ListFeatureClasses("pht_all"):
-                    phottbfm = arcpy.FieldMappings()
-                    phottbfm.addTable(SDEgdb + "\\dbo.PHOTOS")
-                    photbef = arcpy.GetCount_management(SDEgdb + "\\dbo.PHOTOS").getOutput(0)
-                    arcpy.Append_management(fc2, SDEgdb + "\\dbo.PHOTOS", "NO_TEST", phottbfm)
-                    photaft = arcpy.GetCount_management(SDEgdb + "\\dbo.PHOTOS").getOutput(0)
-                    photdif = int(photaft) - int(photbef)
-                    arcpy.AddMessage(str(photdif) + " records added to PHOTOS")
+        for fc in arcpy.ListFeatureClasses("PhotoLocation"):
+            photfm = arcpy.FieldMappings()
+            photfm.addTable(SDEgdb + "\\dbo.PhotoLocation")
+            photlocbef = arcpy.GetCount_management(SDEgdb + "\\dbo.PhotoLocation").getOutput(0)
+            arcpy.Append_management("PhotoLocation_fc", SDEgdb + "\\dbo.PhotoLocation", "NO_TEST", photfm)
+            photlocaft = arcpy.GetCount_management(SDEgdb + "\\dbo.PhotoLocation").getOutput(0)
+            photlocdif = int(photlocaft) - int(photlocbef)
+            arcpy.AddMessage(str(photlocdif) + " records added to PhotoLocation")
+            for fc2 in arcpy.ListFeatureClasses("pht_all"):
+                phottbfm = arcpy.FieldMappings()
+                phottbfm.addTable(SDEgdb + "\\dbo.PHOTOS")
+                photbef = arcpy.GetCount_management(SDEgdb + "\\dbo.PHOTOS").getOutput(0)
+                arcpy.Append_management(fc2, SDEgdb + "\\dbo.PHOTOS", "NO_TEST", phottbfm)
+                photaft = arcpy.GetCount_management(SDEgdb + "\\dbo.PHOTOS").getOutput(0)
+                photdif = int(photaft) - int(photbef)
+                arcpy.AddMessage(str(photdif) + " records added to PHOTOS")
 			
 	
     except Exception as e:
